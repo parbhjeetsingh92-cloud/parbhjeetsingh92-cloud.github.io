@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parbhjeet Singh | B.Sc. Forensic Science – Academic Portfolio</title>
+<meta name="description" content="Academic portfolio of Parbhjeet Singh, B.Sc. Forensic Science student at Lovely Professional University – crime scene investigation, digital and environmental forensics.">
+<meta property="og:title" content="Parbhjeet Singh | Forensic Science Portfolio">
+<meta property="og:description" content="Crime scene investigation, evidence documentation and digital forensics projects.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Libre+Baskerville:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f4ec; --card:#fffdf8; --ink:#1d2430; --muted:#5d6675;
+  --navy:#1f3a5f; --tape:#f2c230; --tape-ink:#1d2430; --evidence:#b3261e;
+  --line:#ddd6c6; --grid:rgba(31,58,95,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:"IBM Plex Sans",sans-serif;color:var(--ink);background:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:28px 28px;line-height:1.65}
+a{color:var(--navy)}
+.mono{font-family:"IBM Plex Mono",monospace}
+h1,h2,h3{font-family:"Libre Baskerville",serif;line-height:1.25}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.tape{background:repeating-linear-gradient(-45deg,var(--tape) 0 28px,var(--tape-ink) 28px 34px);height:10px}
+.tape-text{background:var(--tape);color:var(--tape-ink);font-family:"IBM Plex Mono",monospace;font-weight:600;
+  font-size:12px;letter-spacing:.25em;white-space:nowrap;overflow:hidden;padding:6px 0;border-block:2px solid var(--tape-ink)}
+nav{position:sticky;top:0;z-index:10;background:rgba(247,244,236,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px}
+nav .brand{font-family:"IBM Plex Mono",monospace;font-weight:600;text-decoration:none;color:var(--ink)}
+nav .brand span{color:var(--evidence)}
+nav ul{display:flex;gap:20px;list-style:none;flex-wrap:wrap}
+nav ul a{text-decoration:none;font-size:14px;color:var(--muted);font-weight:500}
+nav ul a:hover{color:var(--evidence)}
+.hero{padding:72px 0 56px}
+.hero-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:center}
+.case{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--evidence);letter-spacing:.12em;text-transform:uppercase}
+.hero h1{font-size:clamp(2.2rem,5vw,3.4rem);margin:12px 0 8px}
+.hero .role{font-size:1.15rem;color:var(--navy);font-weight:600}
+.hero p.lead{margin:18px 0 26px;color:var(--muted);max-width:56ch}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:4px;font-weight:600;font-size:14px;text-decoration:none;border:2px solid var(--navy);transition:.2s}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--evidence);border-color:var(--evidence)}
+.btn.ghost{color:var(--navy);background:transparent}
+.btn.ghost:hover{background:var(--navy);color:#fff}
+.file{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:22px;position:relative;box-shadow:0 14px 30px -18px rgba(29,36,48,.35);transform:rotate(1.2deg)}
+.file::before{content:"EVIDENCE";position:absolute;top:-12px;right:18px;background:var(--evidence);color:#fff;font:600 11px "IBM Plex Mono",monospace;letter-spacing:.2em;padding:4px 10px;border-radius:2px}
+.file table{width:100%;font-family:"IBM Plex Mono",monospace;font-size:13px;border-collapse:collapse}
+.file td{padding:7px 0;border-bottom:1px dashed var(--line);vertical-align:top}
+.file td:first-child{color:var(--muted);width:42%}
+.print{width:70px;height:70px;border-radius:50%;margin-bottom:14px;
+  background:repeating-radial-gradient(circle at 45% 55%,transparent 0 3px,var(--navy) 3px 4px);opacity:.75}
+section{padding:64px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:28px}
+.sec-head .num{font-family:"IBM Plex Mono",monospace;color:var(--evidence);font-weight:600}
+.sec-head h2{font-size:1.9rem}
+.card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--navy);border-radius:6px;padding:22px 24px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.meta{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--muted)}
+.card h3{font-size:1.15rem;margin:6px 0 10px}
+.card ul{padding-left:18px;color:var(--muted)}
+.card li{margin-bottom:6px}
+.proj{border-left-color:var(--evidence);display:flex;flex-direction:column}
+.proj .tag{display:inline-block;font:600 11px "IBM Plex Mono",monospace;letter-spacing:.12em;background:var(--tape);padding:3px 8px;border-radius:2px}
+.proj .actions{margin-top:auto;padding-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{border:1.5px solid var(--navy);color:var(--navy);padding:7px 14px;border-radius:999px;font-size:14px;font-weight:500;background:var(--card)}
+.contact{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.contact a{text-decoration:none;font-weight:600}
+footer{background:var(--navy);color:#e8edf4;padding:26px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+footer a{color:var(--tape)}
+@media(max-width:820px){.hero-grid,.grid2,.grid3,.contact{grid-template-columns:1fr}.file{transform:none}nav ul{display:none}}
+</style>
+</head>
+<body>
+<div class="tape"></div>
+<nav><div class="wrap">
+  <a class="brand" href="#top">PS<span>/</span>FORENSICS</a>
+  <ul>
+    <li><a href="#about">About</a></li><li><a href="#education">Education</a></li>
+    <li><a href="#projects">Projects</a></li><li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap hero-grid">
+  <div>
+    <div class="case">Case File № PS-2025 · Academic Portfolio</div>
+    <h1>Parbhjeet Singh</h1>
+    <div class="role">B.Sc. Forensic Science · Lovely Professional University</div>
+    <p class="lead">Forensic science student focused on crime scene investigation, evidence documentation and digital forensics — building practical tools that make evidence clearer and more traceable.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://www.linkedin.com/in/parbhjeet-singh-907519434" target="_blank" rel="noopener">LinkedIn Profile ↗</a>
+      <a class="btn ghost" href="#projects">View Projects</a>
+    </div>
+  </div>
+  <div class="file">
+    <div class="print"></div>
+    <table>
+      <tr><td>SUBJECT</td><td>Parbhjeet Singh</td></tr>
+      <tr><td>PROGRAM</td><td>B.Sc. Forensic Science</td></tr>
+      <tr><td>INSTITUTE</td><td>LPU, Phagwara</td></tr>
+      <tr><td>STATUS</td><td>2025 – Present</td></tr>
+      <tr><td>FOCUS</td><td>CSI · Digital · Environmental</td></tr>
+    </table>
+  </div>
+</div></header>
+
+<div class="tape-text">&nbsp;FORENSIC SCIENCE · DO NOT CROSS · CRIME SCENE · EVIDENCE · FORENSIC SCIENCE · DO NOT CROSS · CRIME SCENE · EVIDENCE · FORENSIC SCIENCE · DO NOT CROSS ·</div>
+
+<section id="about"><div class="wrap">
+  <div class="sec-head"><span class="num">01</span><h2>Career Objective</h2></div>
+  <div class="card"><p>Motivated B.Sc. Forensic Science student interested in crime scene investigation, evidence documentation and digital forensics. Eager to apply classroom learning, develop practical laboratory skills and contribute responsibly to academic or entry-level forensic projects.</p></div>
+</div></section>
+
+<section id="education"><div class="wrap">
+  <div class="sec-head"><span class="num">02</span><h2>Education</h2></div>
+  <div class="grid2">
+    <div class="card"><div class="meta">2025 – Present · Phagwara, Punjab</div><h3>Bachelor of Science in Forensic Science</h3><p>Lovely Professional University (LPU)</p></div>
+    <div class="card"><div class="meta">Class XII · 86.3%</div><h3>Senior Secondary Education</h3><p>DAV College</p></div>
+  </div>
+</div></section>
+
+<section id="projects"><div class="wrap">
+  <div class="sec-head"><span class="num">03</span><h2>Academic Projects</h2></div>
+  <div class="grid3">
+    <div class="card proj">
+      <span class="tag">EXHIBIT A</span>
+      <h3>Pollution Fingerprint Analyser</h3>
+      <div class="meta">Forensic Water Screening</div>
+      <ul style="margin-top:10px">
+        <li>Screens water samples using pH and TDS readings and organises observations into a structured report.</li>
+        <li>Forensic-style sample record with ID, location, observations and follow-up tests.</li>
+        <li>Acknowledges that pH and TDS alone cannot confirm potability or contamination source.</li>
+      </ul>
+      <div class="actions"><a class="btn primary" href="projects/pollution-fingerprint-analyser.html" target="_blank">Open Tool ↗</a></div>
+    </div>
+    <div class="card proj">
+      <span class="tag">EXHIBIT B</span>
+      <h3>3D Crime Scene Reconstruction</h3>
+      <div class="meta">Digital Evidence Management</div>
+      <ul style="margin-top:10px">
+        <li>Organises scene images, evidence points and relationships for digital reconstruction.</li>
+        <li>Presents scene layout and evidence information in a clear, structured format.</li>
+      </ul>
+      <div class="actions"><a class="btn primary" href="projects/3d-crime-scene-reconstruction.html" target="_blank">Open Tool ↗</a></div>
+    </div>
+    <div class="card proj">
+      <span class="tag">EXHIBIT C</span>
+      <h3>Chain of Custody Management</h3>
+      <div class="meta">HTML Prototype</div>
+      <ul style="margin-top:10px">
+        <li>Offline prototype recording evidence details, officer names, transfer locations and history.</li>
+        <li>Focus on documentation and traceability between collection points and laboratories.</li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<section id="skills"><div class="wrap">
+  <div class="sec-head"><span class="num">04</span><h2>Skills &amp; Interests</h2></div>
+  <div class="grid2">
+    <div class="card"><h3>Forensic Foundations</h3><div class="chips"><span class="chip">Crime scene observation</span><span class="chip">Evidence identification</span><span class="chip">Documentation</span><span class="chip">Chain of custody</span></div>
+      <h3 style="margin-top:18px">Project Skills</h3><div class="chips"><span class="chip">Research</span><span class="chip">Problem-solving</span><span class="chip">Teamwork</span><span class="chip">Attention to detail</span></div></div>
+    <div class="card"><h3>Areas of Interest</h3><div class="chips"><span class="chip">Crime Scene Investigation</span><span class="chip">Digital Forensics</span><span class="chip">Forensic Evidence Management</span><span class="chip">Environmental Forensics</span></div></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <div class="sec-head"><span class="num">05</span><h2>Contact</h2></div>
+  <div class="contact">
+    <div class="card"><div class="meta">LINKEDIN</div><a href="https://www.linkedin.com/in/parbhjeet-singh-907519434" target="_blank" rel="noopener">parbhjeet-singh-907519434 ↗</a></div>
+    <div class="card"><div class="meta">GITHUB</div><a href="https://github.com/parbhjeetsingh92-cloud" target="_blank" rel="noopener">parbhjeetsingh92-cloud ↗</a></div>
+    <div class="card"><div class="meta">PHONE · LOCATION</div><a href="tel:+919216864407">+91 92168 64407</a><div class="meta">Phagwara, Punjab</div></div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <span>© 2026 Parbhjeet Singh · Forensic Science Portfolio</span>
+  <a href="https://www.linkedin.com/in/parbhjeet-singh-907519434" target="_blank" rel="noopener">Connect on LinkedIn</a>
+</div></footer>
+</body>
+</html>
