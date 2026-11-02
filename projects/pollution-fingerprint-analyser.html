@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pollution Fingerprint Analyser | Forensic Screening System</title>
+<style>
+:root{--bg:#07111b;--panel:#101e2b;--panel2:#142638;--line:#294255;--text:#e8f1f7;--muted:#9bb0bf;--cyan:#42d6d0;--gold:#e7b95b;--red:#ff7777;--green:#76d6a2}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0%,#123047 0,transparent 34%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.5}
+header{padding:28px max(20px,calc((100% - 1180px)/2));border-bottom:1px solid var(--line);background:#081521eF}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:52px;height:52px;border:1px solid var(--cyan);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-size:25px}
+h1{font-size:clamp(22px,4vw,34px);margin:0;letter-spacing:1px}.sub{color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase}
+.wrap{max-width:1180px;margin:28px auto;padding:0 18px}.notice{border:1px solid #7b6536;background:#2b2416;color:#f2d99c;padding:13px 16px;border-radius:10px;margin-bottom:20px;font-size:13px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:linear-gradient(145deg,var(--panel),#0c1924);border:1px solid var(--line);border-radius:14px;padding:20px;box-shadow:0 12px 30px #0002}
+.panel h2{font-size:16px;text-transform:uppercase;letter-spacing:1.2px;margin:0 0 17px;color:var(--cyan)}
+.full{grid-column:1/-1}.fields{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:8px;background:#091722;color:var(--text);font:inherit;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan)}textarea{min-height:78px;resize:vertical}
+.sensor{background:#0b1b27;border:1px solid #31536a;border-radius:11px;padding:15px}.sensor .tag{font-size:11px;color:var(--cyan);letter-spacing:1.5px}.sensor input{font-size:24px;font-weight:bold;margin:8px 0}.unit{color:var(--muted);font-size:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:8px;padding:12px 17px;font-weight:bold;cursor:pointer;background:var(--cyan);color:#052027}
+button.secondary{background:#20384a;color:var(--text);border:1px solid #3b5c70}button.warn{background:#5a3030;color:#ffe4e4}
+button:hover{filter:brightness(1.1)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+.metric{padding:14px;background:#0a1924;border:1px solid var(--line);border-radius:10px}.metric small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase}.metric strong{font-size:22px}
+.result{border-left:3px solid var(--gold);padding:12px 14px;background:#1c1b18;border-radius:6px;margin:10px 0}.result.good{border-color:var(--green);background:#10241e}.result.alert{border-color:var(--red);background:#291919}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line)}th{color:var(--cyan);font-size:11px;text-transform:uppercase}
+.empty{color:var(--muted);text-align:center;padding:20px}
+#report{display:none;background:#fff;color:#17232c;padding:28px;border-radius:10px;margin-top:20px}
+#report h2,#report h3{color:#123448}#report table{color:#17232c}#report th{color:#123448}#report td,#report th{border-bottom:1px solid #ccd5dc}
+.report-head{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #1c5367;padding-bottom:14px}.stamp{border:2px solid #a33;color:#a33;padding:8px 12px;font-weight:bold;transform:rotate(-3deg);height:max-content}
+.report-section{margin-top:18px}.report-section p{margin:6px 0}.foot{font-size:11px;color:#5c6a73;border-top:1px solid #ccd5dc;padding-top:12px;margin-top:22px}
+footer{text-align:center;color:#718a9b;font-size:11px;padding:25px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.fields{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.report-head{display:block}.stamp{display:inline-block;margin-top:12px}}
+@media print{body{background:#fff}.wrap,header,footer,.notice,.no-print{display:none!important}#report{display:block!important;margin:0;padding:0;box-shadow:none}#report table{page-break-inside:avoid}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">⌕</div><div><h1>POLLUTION FINGERPRINT ANALYSER</h1><div class="sub">Forensic Water Screening & Evidence Report System</div></div></div></header>
+<main class="wrap">
+<div class="notice"><b>FORENSIC SCREENING NOTICE:</b> This tool records pH and TDS readings for preliminary screening. It does not certify drinking-water safety, identify a specific contaminant, or establish the source of pollution. Confirm findings through an accredited laboratory.</div>
+<div class="grid">
+<section class="panel">
+<h2>01 / Case identification</h2>
+<div class="fields">
+<div><label for="caseId">Case / File Number</label><input id="caseId" placeholder="e.g. PFA-2026-001"></div>
+<div><label for="analyst">Analyst / Investigator</label><input id="analyst" placeholder="Enter analyst name"></div>
+<div><label for="sampleId">Sample ID</label><input id="sampleId" placeholder="e.g. W-001"></div>
+<div><label for="date">Collection date</label><input id="date" type="date"></div>
+<div><label for="place">Sample collection location</label><input id="place" placeholder="Village, site, area..."></div>
+<div><label for="source">Reported water source</label><select id="source"><option value="">Select source</option><option>Groundwater / Borewell</option><option>Industrial discharge / nearby</option><option>Agricultural area / field</option><option>Domestic supply</option><option>Surface water</option><option>Unknown</option></select></div>
+</div>
+<div style="margin-top:13px"><label for="notes">Collection notes / visible observations</label><textarea id="notes" placeholder="Record appearance, odour (if observed safely), collection conditions, etc."></textarea></div>
+</section>
+<section class="panel">
+<h2>02 / Sensor readings</h2>
+<div class="fields">
+<div class="sensor"><div class="tag">PH SENSOR</div><label for="ph">Measured pH</label><input id="ph" type="number" min="0" max="14" step="0.01" placeholder="7.00"><div class="unit">Scale: 0–14</div></div>
+<div class="sensor"><div class="tag">TDS SENSOR</div><label for="tds">Measured TDS</label><input id="tds" type="number" min="0" step="1" placeholder="300"><div class="unit">Parts per million (ppm)</div></div>
+</div>
+<p class="unit" style="margin-top:12px">Enter the values displayed by your calibrated pH and TDS instruments. This browser page records readings; it does not connect directly to the physical sensors.</p>
+<div class="actions no-print"><button onclick="addSample()">＋ Add sample to case</button><button class="secondary" onclick="clearInputs()">Clear fields</button></div>
+</section>
+<section class="panel full">
+<h2>03 / Case sample register</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Sample ID</th><th>Location</th><th>Collection date</th><th>pH</th><th>TDS (ppm)</th><th>Screening observation</th></tr></thead><tbody id="sampleRows"><tr><td colspan="6" class="empty">No samples recorded yet. Enter readings and add a sample.</td></tr></tbody></table></div>
+<div class="actions no-print"><button onclick="generateReport()">Generate forensic report</button><button class="secondary" onclick="exportCSV()">Export sample register (CSV)</button><button class="warn" onclick="clearCase()">Clear entire case</button></div>
+</section>
+</div>
+<section id="report">
+<div class="report-head"><div><div style="font-size:11px;letter-spacing:2px">POLLUTION FINGERPRINT ANALYSER</div><h2 style="margin:5px 0">PRELIMINARY FORENSIC WATER SCREENING REPORT</h2><div style="font-size:12px">Evidence documentation • pH & TDS analysis</div></div><div class="stamp">PRELIMINARY<br>SCREENING ONLY</div></div>
+<div class="report-section"><h3>1. Case particulars</h3><div id="rCase"></div></div>
+<div class="report-section"><h3>2. Sample results and observations</h3><div id="rSamples"></div></div>
+<div class="report-section"><h3>3. Interpretation</h3><div id="rInterpretation"></div></div>
+<div class="report-section"><h3>4. Recommended confirmatory examination</h3><ul id="rTests"></ul></div>
+<div class="report-section"><h3>5. Conclusion</h3><p id="rConclusion"></p></div>
+<div class="foot"><b>Limitations:</b> pH and TDS are screening parameters only. TDS does not identify which dissolved substances are present. These readings cannot prove a pollution source, determine potability, or replace chemical and microbiological testing. Results depend on instrument calibration, sampling, handling and test conditions. This report is a preliminary record, not an accredited laboratory certificate.<br><br>Analyst signature: ____________________________ &nbsp;&nbsp; Date: __________________</div>
+<div class="actions no-print"><button onclick="window.print()">Print / Save report as PDF</button><button class="secondary" onclick="downloadReport()">Download report (HTML)</button></div>
+</section>
+</main>
+<footer>FORENSIC WATER SCREENING SYSTEM • OFFLINE SINGLE-FILE EDITION</footer>
+<script>
+const samples=[];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function classify(ph,tds){
+ let p=ph<6.5?'Acidic reading':ph>8.5?'Alkaline reading':'Within the common 6.5–8.5 screening band';
+ let t=tds>500?'Elevated TDS reading relative to a commonly used 500 ppm reference': 'TDS at or below the commonly used 500 ppm reference';
+ let level=(ph<6.5||ph>8.5||tds>500)?'Review recommended':'No screening flag from these two values alone';
+ return {p,t,level};
+}
+function addSample(){
+ const id=$('sampleId').value.trim(), place=$('place').value.trim(), date=$('date').value, ph=Number($('ph').value),tds=Number($('tds').value);
+ if(!id||!place||!date||$('ph').value===''||$('tds').value===''){alert('Please enter Sample ID, location, collection date, pH and TDS.');return}
+ if(!Number.isFinite(ph)||ph<0||ph>14||!Number.isFinite(tds)||tds<0){alert('Enter a valid pH (0–14) and non-negative TDS value.');return}
+ if(samples.some(s=>s.id.toLowerCase()===id.toLowerCase())){alert('That Sample ID is already in this case. Use a unique ID.');return}
+ samples.push({id,place,date,ph,tds,source:$('source').value,notes:$('notes').value.trim(),...classify(ph,tds)});
+ renderRows();clearInputs(false);
+}
+function renderRows(){
+ $('sampleRows').innerHTML=samples.length?samples.map(s=>`<tr><td>${esc(s.id)}</td><td>${esc(s.place)}</td><td>${esc(s.date)}</td><td>${s.ph.toFixed(2)}</td><td>${s.tds.toFixed(0)}</td><td>${esc(s.level)}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">No samples recorded yet.</td></tr>';
+}
+function clearInputs(clearMeta=true){['sampleId','place','date','ph','tds','notes'].forEach(id=>$(id).value='');if(clearMeta)$('source').value='';}
+function clearCase(){if(confirm('Delete all samples and clear this case from the page?')){samples.length=0;renderRows();$('report').style.display='none';}}
+function generateReport(){
+ if(!samples.length){alert('Add at least one sample before generating the report.');return}
+ const flagged=samples.filter(s=>s.level!=='No screening flag from these two values alone').length;
+ $('rCase').innerHTML=`<p><b>Case number:</b> ${esc($('caseId').value||'Not provided')} &nbsp; <b>Analyst:</b> ${esc($('analyst').value||'Not provided')}</p><p><b>Reported source category:</b> ${esc($('source').value||'Not specified')} &nbsp; <b>Samples examined:</b> ${samples.length}</p>`;
+ $('rSamples').innerHTML='<table><thead><tr><th>Sample ID / Location</th><th>pH</th><th>TDS (ppm)</th><th>Screening note</th></tr></thead><tbody>'+samples.map(s=>`<tr><td><b>${esc(s.id)}</b><br>${esc(s.place)}<br><small>${esc(s.date)}</small></td><td>${s.ph.toFixed(2)}<br>${esc(s.p)}</td><td>${s.tds.toFixed(0)}<br>${esc(s.t)}</td><td>${esc(s.level)}</td></tr>`).join('')+'</tbody></table>'+samples.map(s=>s.notes?`<p><b>${esc(s.id)} field notes:</b> ${esc(s.notes)}</p>`:'').join('');
+ $('rInterpretation').innerHTML=samples.map(s=>`<p><b>${esc(s.id)}:</b> ${esc(s.p)}. ${esc(s.t)}. ${esc(s.level)}.</p>`).join('')+`<p>${flagged} of ${samples.length} sample(s) have at least one screening flag under the simple thresholds used here. These are prompts for further testing, not proof of contamination.</p>`;
+ const tests=['Repeat pH and TDS measurements with calibrated instruments and documented quality-control checks.','Laboratory analysis for major ions, electrical conductivity, hardness and alkalinity.','Select targeted tests based on the site history: nitrate, phosphate, chloride, sulphate, metals (such as lead, arsenic, cadmium and chromium), or relevant industrial chemicals.','Microbiological examination where the water source or exposure history makes it relevant.','Collect comparison/control samples upstream, downstream or from a suitable reference location, using documented chain-of-custody procedures.'];
+ $('rTests').innerHTML=tests.map(t=>`<li>${t}</li>`).join('');
+ $('rConclusion').textContent=`The submitted ${samples.length} water sample(s) were screened using pH and TDS readings entered by the operator. ${flagged} sample(s) showed one or more screening flags. The available measurements are insufficient to identify a contaminant, establish a pollution source, or determine whether the water is safe for consumption. Confirmatory laboratory testing and contextual investigation are required before drawing forensic conclusions.`;
+ $('report').style.display='block';$('report').scrollIntoView({behavior:'smooth'});
+}
+function exportCSV(){
+ if(!samples.length){alert('No samples to export.');return}
+ const rows=[['Sample ID','Location','Date','pH','TDS ppm','Source','Screening observation','Notes'],...samples.map(s=>[s.id,s.place,s.date,s.ph,s.tds,s.source,s.level,s.notes])];
+ const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='PFA_sample_register.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function downloadReport(){
+ if(!$('report').style.display||$('report').style.display==='none'){alert('Generate the report first.');return}
+ const clone=document.documentElement.cloneNode(true);clone.querySelectorAll('.no-print').forEach(e=>e.remove());clone.querySelector('#report').style.display='block';
+ const blob=new Blob(['<!DOCTYPE html>'+clone.outerHTML],{type:'text/html'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='PFA_forensic_report.html';a.click();URL.revokeObjectURL(a.href);
+}
+$('date').value=new Date().toISOString().slice(0,10);
+</script>
+</body></html>

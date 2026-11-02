@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Crime Scene Reconstruction</title>
+<style>
+:root{--bg:#070b14;--panel:#101827;--panel2:#172238;--line:#2b3a56;--text:#eef4ff;--muted:#91a0ba;--blue:#67a8ff;--green:#55d6a1;--red:#ff647c;--gold:#ffd36a}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:radial-gradient(circle at 15% 0,#1b3155,#070b14 48%);color:var(--text)}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.wrap{max-width:1250px;margin:auto;padding:22px}.hidden{display:none!important}
+.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}.brand{display:flex;gap:13px;align-items:center}.logo{width:48px;height:48px;border-radius:14px;border:1px solid #466997;background:#12213a;display:grid;place-items:center;font-size:24px}.brand h1{margin:0;font-size:22px}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}
+.card{background:#101827eF;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 18px 50px #0006}.login{max-width:480px;margin:9vh auto}.field{margin:12px 0}.field label{display:block;color:#c7d2e8;font-size:12px;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;padding:11px 12px;background:#09111f;border:1px solid #344562;border-radius:10px;color:var(--text);outline:none}.field textarea{min-height:100px;resize:vertical}.primary,.secondary,.danger{border:0;border-radius:10px;padding:10px 14px;font-weight:700}.primary{background:var(--blue);color:#06101f}.secondary{background:#25334d;color:white}.danger{background:#702638;color:white}.row{display:flex;gap:9px;flex-wrap:wrap}.error{color:#ff9aaa;font-size:12px;min-height:17px;margin-top:7px}.muted{color:var(--muted);font-size:13px}
+.layout{display:grid;grid-template-columns:245px 1fr;gap:17px}.side{height:max-content;position:sticky;top:15px}.side button{width:100%;text-align:left;margin:5px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;margin-bottom:16px}.stat{background:#0e1627;border:1px solid var(--line);border-radius:13px;padding:14px}.stat b{font-size:23px}.stat span{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.search{display:flex;gap:9px;margin-bottom:13px}.search input{flex:1;padding:11px;border:1px solid var(--line);border-radius:10px;background:#0b1322;color:white}
+.cases{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:12px}.case{background:#111c30;border:1px solid var(--line);border-radius:14px;padding:14px}.case h3{margin:8px 0 6px}.case img{width:100%;height:135px;object-fit:cover;border-radius:9px;margin:8px 0}.tag{display:inline-block;padding:4px 7px;border-radius:99px;background:#1c3457;color:#a9d0ff;font-size:10px}.locktag{background:#42222d;color:#ffb3bf}.opentag{background:#173b31;color:#9ef0cc}
+.modal{position:fixed;inset:0;background:#000a;display:grid;place-items:center;padding:18px;z-index:20}.modal .card{width:min(700px,100%);max-height:92vh;overflow:auto}
+.scene{height:330px;border:1px solid #3b4d6d;border-radius:15px;overflow:hidden;position:relative;background:linear-gradient(#33445f,#192235);perspective:800px}.floor{position:absolute;left:-10%;right:-10%;bottom:-24%;height:63%;background:repeating-linear-gradient(90deg,#2a3952 0 65px,#233148 65px 130px);transform:rotateX(55deg)}.wall{position:absolute;inset:0 0 48%;background:linear-gradient(#3a4b66,#28364d)}.obj{position:absolute;width:58px;height:58px;border-radius:9px;display:grid;place-items:center;font-weight:900;color:#07111d;box-shadow:0 8px 18px #0008;cursor:default}.e1{left:18%;top:57%;background:var(--blue)}.e2{left:48%;top:66%;background:var(--gold)}.e3{left:74%;top:51%;background:var(--green)}.scene-title{position:absolute;left:14px;top:14px;background:#08101dcc;padding:7px 10px;border-radius:8px;font-size:11px}
+.detailgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}.info{background:#0c1424;border:1px solid var(--line);border-radius:12px;padding:13px}.info b{font-size:11px;color:#9fb0cb}.info div{margin-top:5px}
+.evidence{background:#0c1424;border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0}.evidence img{max-width:210px;max-height:145px;border-radius:8px;margin-top:8px}.ehead{display:flex;justify-content:space-between;gap:8px;align-items:center}.num{background:#263754;border-radius:8px;padding:4px 7px;font-size:10px}
+.audit{font-size:11px;color:var(--muted);border-top:1px solid var(--line);margin-top:14px;padding-top:12px}
+.notice{padding:11px;border-radius:10px;background:#17263d;border:1px solid #324d73;color:#bdd7ff;font-size:12px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.side{position:static}.stats{grid-template-columns:1fr 1fr}.detailgrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body><div id="app"></div>
+<script>
+const STORE="crimeSceneReconstruction_v2";
+let state=JSON.parse(localStorage.getItem(STORE)||"null")||{cases:[]};
+let activeCase=null, unlockedCases=new Set(), currentFilter="";
+function save(){localStorage.setItem(STORE,JSON.stringify(state))}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function readImg(file,cb){if(!file)return cb("");let r=new FileReader();r.onload=()=>cb(r.result);r.readAsDataURL(file)}
+function caseId(){return "CS-"+String(state.cases.length+1).padStart(3,"0")}
+function modal(body){let d=document.createElement("div");d.className="modal";d.id="modal";d.innerHTML='<div class="card">'+body+"</div>";document.body.appendChild(d)}
+function closeModal(){document.getElementById("modal")?.remove()}
+function loginCase(id){
+ let c=state.cases.find(x=>x.id===id);
+ modal(`<h2>🔐 ${esc(c.id)}</h2><p class="muted">This case is protected by its own password.</p>
+ <div class="field"><label>Case Password</label><input id="casePw" type="password" autofocus placeholder="Enter case password"></div>
+ <div id="caseErr" class="error"></div>
+ <div class="row"><button class="primary" onclick="unlock('${id}')">Unlock Case</button><button class="secondary" onclick="closeModal()">Cancel</button></div>`);
+ casePw.addEventListener("keydown",e=>{if(e.key==="Enter")unlock(id)})
+}
+function unlock(id){let c=state.cases.find(x=>x.id===id);if(casePw.value===c.password){unlockedCases.add(id);closeModal();openCase(id)}else caseErr.textContent="Incorrect case password."}
+function dashboard(){
+ let total=state.cases.reduce((n,c)=>n+c.evidence.length,0);
+ app.innerHTML=`<div class="wrap"><div class="top"><div class="brand"><div class="logo">🔎</div><div><h1>3D Crime Scene Reconstruction</h1><p>Secure Digital Forensic Case Management</p></div></div><button class="secondary" onclick="newCase()">＋ New Case</button></div>
+ <div class="layout"><aside class="card side">
+ <button class="primary" onclick="newCase()">＋ Create New Crime Scene</button>
+ <button class="secondary" onclick="aboutSecurity()">🔐 Security Model</button>
+ <button class="secondary" onclick="exportBackup()">⬇ Export Backup</button>
+ <button class="secondary" onclick="importBackup()">⬆ Import Backup</button>
+ <button class="danger" onclick="clearAll()">🗑 Clear All Cases</button>
+ <div class="notice" style="margin-top:15px">Each case has a separate password. A person can see the case list, but cannot open or edit a locked case without its password.</div>
+ </aside>
+ <main><div class="stats"><div class="stat"><b>${state.cases.length}</b><span>Total Cases</span></div><div class="stat"><b>${total}</b><span>Evidence Records</span></div><div class="stat"><b>${state.cases.filter(c=>c.status==="Active").length}</b><span>Active Cases</span></div><div class="stat"><b>${unlockedCases.size}</b><span>Unlocked This Session</span></div></div>
+ <div class="card"><div class="search"><input id="search" placeholder="Search case name, ID, location..." value="${esc(currentFilter)}" oninput="filterCases()"><button class="secondary" onclick="currentFilter='';dashboard()">Reset</button></div>
+ <div id="caseList">${renderCases()}</div></div></main></div></div>`;
+}
+function renderCases(){
+ let q=currentFilter.toLowerCase();
+ let list=state.cases.filter(c=>(c.id+" "+c.name+" "+c.location).toLowerCase().includes(q));
+ if(!list.length)return '<div style="text-align:center;padding:38px" class="muted">No cases found.<br><br><button class="primary" onclick="newCase()">Create the first case</button></div>';
+ return '<div class="cases">'+list.map(c=>`<div class="case"><span class="tag">${esc(c.id)}</span> <span class="tag locktag">🔒 Password</span><h3>${esc(c.name)}</h3>
+ ${c.cover?`<img src="${c.cover}">`:''}<p class="muted">🕒 ${esc(c.datetime||"Not recorded")}<br>📍 ${esc(c.location||"Not recorded")}<br>🧪 ${c.evidence.length} evidence item(s)</p>
+ <div class="row"><button class="secondary" onclick="openOrUnlock('${c.id}')">${unlockedCases.has(c.id)?"Open Case →":"🔐 Enter Password"}</button></div></div>`).join("")+'</div>';
+}
+function filterCases(){currentFilter=search.value;caseList.innerHTML=renderCases()}
+function openOrUnlock(id){if(unlockedCases.has(id))openCase(id);else loginCase(id)}
+function newCase(){
+ let id=caseId();
+ modal(`<h2>＋ Create ${id}</h2><p class="muted">Give this case its own name and password. The password is required to view or edit this case.</p>
+ <div class="field"><label>Case Name</label><input id="n" placeholder="e.g. Warehouse Investigation"></div>
+ <div class="field"><label>Case Password</label><input id="p" type="password" placeholder="Create a password"></div>
+ <div class="field"><label>Confirm Password</label><input id="p2" type="password"></div>
+ <div class="field"><label>Date & Time of Scene</label><input id="dt" type="datetime-local"></div>
+ <div class="field"><label>Location</label><input id="loc" placeholder="Scene location"></div>
+ <div class="field"><label>Case Description</label><textarea id="desc" placeholder="Initial scene description..."></textarea></div>
+ <div class="field"><label>Scene Cover Picture</label><input id="cover" type="file" accept="image/*"></div>
+ <div id="ce" class="error"></div><div class="row"><button class="primary" onclick="createCase('${id}')">Save Case</button><button class="secondary" onclick="closeModal()">Cancel</button></div>`);
+}
+function createCase(id){
+ if(!n.value.trim())return ce.textContent="Enter a case name.";
+ if(p.value.length<4)return ce.textContent="Use a case password of at least 4 characters.";
+ if(p.value!==p2.value)return ce.textContent="Passwords do not match.";
+ readImg(cover.files[0],img=>{state.cases.push({id,name:n.value.trim(),password:p.value,datetime:dt.value,location:loc.value,description:desc.value,cover:img,status:"Active",evidence:[],created:new Date().toLocaleString(),updated:new Date().toLocaleString()});save();unlockedCases.add(id);closeModal();dashboard();openCase(id)})
+}
+function openCase(id){
+ activeCase=state.cases.find(c=>c.id===id);
+ if(!activeCase)return dashboard();
+ app.innerHTML=`<div class="wrap"><div class="top"><div><button class="secondary" onclick="dashboard()">← All Cases</button><h1 style="margin:12px 0 0">${esc(activeCase.id)} · ${esc(activeCase.name)}</h1><p class="muted">🔓 Unlocked for this browser session</p></div><div class="row"><button class="secondary" onclick="editCase()">✏ Edit Case</button><button class="danger" onclick="deleteCase()">Delete</button></div></div>
+ <div class="card"><div class="scene"><div class="wall"></div><div class="floor"></div><div class="scene-title">3D RECONSTRUCTION · ${esc(activeCase.id)}</div><div class="obj e1">E1</div><div class="obj e2">E2</div><div class="obj e3">E3</div></div>
+ <div class="detailgrid"><div class="info"><b>DATE & TIME</b><div>${esc(activeCase.datetime||"Not recorded")}</div></div><div class="info"><b>LOCATION</b><div>${esc(activeCase.location||"Not recorded")}</div></div><div class="info"><b>DESCRIPTION</b><div>${esc(activeCase.description||"Not recorded")}</div></div><div class="info"><b>CASE STATUS</b><div>${esc(activeCase.status)}</div></div></div>
+ <div style="margin-top:20px"><div class="top" style="margin:0"><div><h2 style="margin:0">Evidence Records</h2><p class="muted">Add photographs, discovery time, location and observations.</p></div><button class="primary" onclick="addEvidence()">＋ Add Evidence</button></div>
+ ${activeCase.evidence.length?activeCase.evidence.map((e,i)=>`<div class="evidence"><div class="ehead"><div><span class="num">E-${String(i+1).padStart(2,"0")}</span> <b>${esc(e.name)}</b></div><div class="row"><button class="secondary" onclick="editEvidence(${i})">Edit</button><button class="danger" onclick="deleteEvidence(${i})">Delete</button></div></div>
+ <p class="muted">🕒 ${esc(e.time||"Not recorded")} · 📍 ${esc(e.location||"Not recorded")}</p><div>${esc(e.notes||"No notes")}</div>${e.img?`<img src="${e.img}">`:''}</div>`).join(""):'<p class="muted" style="padding:20px 0">No evidence has been added to this case.</p>'}
+ </div><div class="audit">Created: ${esc(activeCase.created)} · Last updated: ${esc(activeCase.updated||"—")}</div></div></div>`;
+}
+function editCase(){
+ modal(`<h2>✏ Edit Case</h2><div class="field"><label>Case Name</label><input id="enm" value="${esc(activeCase.name)}"></div>
+ <div class="field"><label>Date & Time</label><input id="edt" type="datetime-local" value="${esc(activeCase.datetime)}"></div>
+ <div class="field"><label>Location</label><input id="eloc" value="${esc(activeCase.location)}"></div>
+ <div class="field"><label>Description</label><textarea id="edesc">${esc(activeCase.description)}</textarea></div>
+ <div class="field"><label>Replace Cover Picture (optional)</label><input id="ecover" type="file" accept="image/*"></div>
+ <div class="row"><button class="primary" onclick="saveCaseEdit()">Save Changes</button><button class="secondary" onclick="closeModal()">Cancel</button></div>`);
+}
+function saveCaseEdit(){readImg(ecover.files[0],img=>{activeCase.name=enm.value.trim()||activeCase.name;activeCase.datetime=edt.value;activeCase.location=eloc.value;activeCase.description=edesc.value;if(img)activeCase.cover=img;activeCase.updated=new Date().toLocaleString();save();closeModal();openCase(activeCase.id)})}
+function addEvidence(){evidenceForm(null)}
+function evidenceForm(index){
+ let e=index===null?{name:"",time:"",location:"",notes:"",img:""}:activeCase.evidence[index];
+ modal(`<h2>${index===null?"＋ Add":"✏ Edit"} Evidence</h2><div class="field"><label>Evidence Name / ID</label><input id="evn" value="${esc(e.name)}" placeholder="e.g. Fingerprint, fibre, document"></div>
+ <div class="field"><label>Time Found</label><input id="evt" type="datetime-local" value="${esc(e.time)}"></div>
+ <div class="field"><label>Exact Location in Scene</label><input id="evl" value="${esc(e.location)}" placeholder="e.g. Near north window"></div>
+ <div class="field"><label>Observations / Notes</label><textarea id="evnotes">${esc(e.notes)}</textarea></div>
+ <div class="field"><label>Evidence Photograph</label><input id="evi" type="file" accept="image/*"></div>
+ <div class="row"><button class="primary" onclick="saveEvidence(${index===null?"null":index})">Save Evidence</button><button class="secondary" onclick="closeModal()">Cancel</button></div>`);
+}
+function saveEvidence(index){readImg(evi.files[0],img=>{let old=index===null?{}:activeCase.evidence[index];let item={name:evn.value.trim()||"Unnamed evidence",time:evt.value,location:evl.value,notes:evnotes.value,img:img||old.img||""};if(index===null)activeCase.evidence.push(item);else activeCase.evidence[index]=item;activeCase.updated=new Date().toLocaleString();save();closeModal();openCase(activeCase.id)})}
+function editEvidence(i){evidenceForm(i)}
+function deleteEvidence(i){if(confirm("Delete this evidence record?")){activeCase.evidence.splice(i,1);activeCase.updated=new Date().toLocaleString();save();openCase(activeCase.id)}}
+function deleteCase(){if(confirm("Delete "+activeCase.id+" and all of its evidence?")){state.cases=state.cases.filter(c=>c.id!==activeCase.id);unlockedCases.delete(activeCase.id);save();dashboard()}}
+function aboutSecurity(){modal(`<h2>🔐 Case-Level Security</h2><p>Every case has its own password. The main dashboard is public, but a locked case cannot be opened or edited until its password is entered.</p><ul><li>Different password for every case</li><li>Opening a case unlocks it only for the current browser session</li><li>Only unlocked cases show edit controls</li><li>Case passwords are not shared between cases</li></ul><p class="notice">Important: this is a browser-based college-project prototype. Local browser storage is not a substitute for a real secure server/database. For real forensic records, authentication, encrypted storage, access logs and proper server-side security are required.</p><button class="secondary" onclick="closeModal()">Close</button>`)}
+function exportBackup(){let blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});let a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="crime-scene-cases-backup.json";a.click();URL.revokeObjectURL(a.href)}
+function importBackup(){let i=document.createElement("input");i.type="file";i.accept=".json";i.onchange=()=>{let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!Array.isArray(x.cases))throw 0;state=x;save();dashboard();alert("Backup imported successfully.")}catch{alert("Invalid backup file.")}};r.readAsText(i.files[0])};i.click()}
+function clearAll(){if(confirm("This will permanently remove ALL cases from this browser. Continue?")){state={cases:[]};unlockedCases.clear();save();dashboard()}}
+dashboard();
+</script>
+</body>
+</html>
